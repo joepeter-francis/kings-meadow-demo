@@ -9,13 +9,14 @@ export default function Hero() {
       id="hero"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage:
-            "url(https://www.thekingsmeadows.com/wp-content/uploads/2024/02/banner.jpg)",
-        }}
+      {/* Background video */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover"
+        src="/hero.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
       />
 
       {/* Gradient overlay */}

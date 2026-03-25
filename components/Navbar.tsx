@@ -18,7 +18,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.75);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -27,8 +27,8 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-white/95 backdrop-blur-sm shadow-sm"
-          : "bg-transparent"
+          ? "bg-white/95 backdrop-blur-sm shadow-sm opacity-100 translate-y-0"
+          : "opacity-0 -translate-y-2 pointer-events-none"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
