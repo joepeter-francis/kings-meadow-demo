@@ -104,7 +104,7 @@ export default function About() {
               {/* Floating badge */}
               <div className="absolute -bottom-6 -left-6 bg-forest text-white p-8 shadow-2xl hidden md:block">
                 <p className="script-accent text-gold-light text-3xl mb-1">
-                  Est. 2024
+                  Est. 2010
                 </p>
                 <p className="text-xs tracking-widest uppercase text-white/60">
                   Bangalore, Karnataka
