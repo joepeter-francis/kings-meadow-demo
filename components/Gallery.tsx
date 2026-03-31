@@ -17,11 +17,18 @@ const IMAGES = [
   { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg", alt: "Venue at The King's Meadows" },
 ];
 
-// Crown clip-path — matches the King's Meadows logo crown:
-//   5 peaks: center (tallest, 0%), two inner peaks (5%), two outer peaks (25%).
-//   Crown band starts at 55% from the top.
+// Crown clip-path — one crown spanning the full grid width.
+// The shoulder/valley level sits at 38% from the top so the entire
+// area below 38% is a solid connected rectangle (the crown body).
+// Only the peaks pierce above 38%; valleys cut back down to 38%,
+// never below — this keeps it ONE shape, not multiple.
+//
+//   center peak:       50%  → 0%
+//   inner peaks:   40%/60%  → 3%
+//   outer peaks:   18%/82%  → 20%
+//   shoulder/valley level:    38%
 const CROWN_CLIP =
-  "polygon(0% 100%, 0% 55%, 8% 55%, 18% 25%, 28% 55%, 38% 5%, 47% 55%, 50% 0%, 53% 55%, 62% 5%, 72% 55%, 82% 25%, 92% 55%, 100% 55%, 100% 100%)";
+  "polygon(0% 100%, 0% 38%, 18% 20%, 30% 38%, 40% 3%, 48% 38%, 50% 0%, 52% 38%, 60% 3%, 70% 38%, 82% 20%, 100% 38%, 100% 100%)";
 
 function FadeIn({
   children,
