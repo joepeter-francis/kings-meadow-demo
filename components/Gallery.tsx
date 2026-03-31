@@ -5,12 +5,23 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { X, ZoomIn } from "lucide-react";
 
-// Crown shape — hardcoded tiles so Tailwind never misses the placement classes.
-//
-//  Row 1: [LEFT PEAK 2col] [CENTER PEAK 2col] [RIGHT PEAK 2col]
-//  Row 2: [LEFT PEAK 2col] [CENTER PEAK 2col] [RIGHT PEAK 2col]
-//  Row 3: [vL1][vL2]       [CENTER PEAK 2col] [vR1][vR2]
-//  Row 4: [BASE — full 6-col width                           ]
+const IMAGES = [
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/ASHK1682.jpg", alt: "Wedding celebration at The King's Meadows" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/02/DJI_0175.jpg", alt: "Aerial view of The King's Meadows" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg", alt: "Elegant venue interior" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/ASHK1710-scaled.jpg", alt: "Reception at The King's Meadows" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/Chandlier.jpg", alt: "Grand chandelier in the banquet hall" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5868-new-3-2-1.jpg", alt: "Event at The King's Meadows" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_2715-scaled.jpg", alt: "Banquet hall setup" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_6061-new-3-2-scaled.jpg", alt: "Outdoor event at The Meadow" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg", alt: "Venue at The King's Meadows" },
+];
+
+// Crown clip-path — matches the King's Meadows logo crown:
+//   5 peaks: center (tallest, 0%), two inner peaks (5%), two outer peaks (25%).
+//   Crown band starts at 55% from the top.
+const CROWN_CLIP =
+  "polygon(0% 100%, 0% 55%, 8% 55%, 18% 25%, 28% 55%, 38% 5%, 47% 55%, 50% 0%, 53% 55%, 62% 5%, 72% 55%, 82% 25%, 92% 55%, 100% 55%, 100% 100%)";
 
 function FadeIn({
   children,
@@ -57,63 +68,36 @@ export default function Gallery() {
           </div>
         </FadeIn>
 
-        {/* Crown grid — 6-col desktop, 2-col mobile */}
-        <div className="grid grid-cols-2 md:grid-cols-6 md:auto-rows-[200px] gap-2">
-
-          {/* LEFT PEAK — cols 1-2, rows 1-2 */}
-          <FadeIn delay={0.05} className="md:col-start-1 md:col-span-2 md:row-start-1 md:row-span-2">
-            <button onClick={() => setLightbox("https://www.thekingsmeadows.com/wp-content/uploads/2024/03/ASHK1682.jpg")}
-              className="gallery-item relative w-full h-full min-h-[160px] block group" aria-label="View wedding celebration">
-              <Image src="https://www.thekingsmeadows.com/wp-content/uploads/2024/03/ASHK1682.jpg"
-                alt="Wedding celebration at The King's Meadows" fill className="object-cover" sizes="(max-width: 768px) 50vw, 33vw" unoptimized />
-              <div className="absolute inset-0 bg-forest-dark/0 group-hover:bg-forest-dark/30 transition-all duration-300 flex items-center justify-center">
-                <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-all w-8 h-8" />
-              </div>
-            </button>
-          </FadeIn>
-
-          {/* CENTER PEAK (tallest) — cols 3-4, rows 1-3 */}
-          <FadeIn delay={0.1} className="md:col-start-3 md:col-span-2 md:row-start-1 md:row-span-3">
-            <button onClick={() => setLightbox("https://www.thekingsmeadows.com/wp-content/uploads/2024/02/DJI_0175.jpg")}
-              className="gallery-item relative w-full h-full min-h-[160px] block group" aria-label="View aerial shot">
-              <Image src="https://www.thekingsmeadows.com/wp-content/uploads/2024/02/DJI_0175.jpg"
-                alt="Aerial view of The King's Meadows" fill className="object-cover" sizes="(max-width: 768px) 50vw, 33vw" unoptimized />
-              <div className="absolute inset-0 bg-forest-dark/0 group-hover:bg-forest-dark/30 transition-all duration-300 flex items-center justify-center">
-                <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-all w-8 h-8" />
-              </div>
-            </button>
-          </FadeIn>
-
-          {/* RIGHT PEAK — cols 5-6, rows 1-2 */}
-          <FadeIn delay={0.15} className="md:col-start-5 md:col-span-2 md:row-start-1 md:row-span-2">
-            <button onClick={() => setLightbox("https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg")}
-              className="gallery-item relative w-full h-full min-h-[160px] block group" aria-label="View elegant interior">
-              <Image src="https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg"
-                alt="Elegant venue interior" fill className="object-cover" sizes="(max-width: 768px) 50vw, 33vw" unoptimized />
-              <div className="absolute inset-0 bg-forest-dark/0 group-hover:bg-forest-dark/30 transition-all duration-300 flex items-center justify-center">
-                <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-all w-8 h-8" />
-              </div>
-            </button>
-          </FadeIn>
-
-          {/* Crown valleys — cols 1-2 and cols 5-6 at row 3 are intentionally empty
-               so the background shows through, creating the dip between the crown peaks */}
-          <div className="hidden md:block md:col-start-1 md:col-span-2 md:row-start-3" />
-          <div className="hidden md:block md:col-start-5 md:col-span-2 md:row-start-3" />
-
-          {/* CROWN BASE — full width, row 4 */}
-          <FadeIn delay={0.4} className="col-span-2 md:col-start-1 md:col-span-6 md:row-start-4">
-            <button onClick={() => setLightbox("https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_6061-new-3-2-scaled.jpg")}
-              className="gallery-item relative w-full h-full min-h-[160px] block group" aria-label="View outdoor event">
-              <Image src="https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_6061-new-3-2-scaled.jpg"
-                alt="Outdoor event at The Meadow" fill className="object-cover" sizes="(max-width: 768px) 100vw, 100vw" unoptimized />
-              <div className="absolute inset-0 bg-forest-dark/0 group-hover:bg-forest-dark/30 transition-all duration-300 flex items-center justify-center">
-                <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-all w-8 h-8" />
-              </div>
-            </button>
-          </FadeIn>
-
-        </div>
+        {/* Crown-shaped gallery: 3×3 photo grid clipped into a crown silhouette */}
+        <FadeIn delay={0.1}>
+          <div
+            className="relative h-[340px] md:h-[560px] overflow-hidden"
+            style={{ clipPath: CROWN_CLIP }}
+          >
+            <div className="grid grid-cols-3 h-full gap-0.5">
+              {IMAGES.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={() => setLightbox(img.src)}
+                  className="relative w-full h-full group"
+                  aria-label={`View ${img.alt}`}
+                >
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 33vw, 25vw"
+                    unoptimized
+                  />
+                  <div className="absolute inset-0 bg-forest-dark/0 group-hover:bg-forest-dark/30 transition-all duration-300 flex items-center justify-center">
+                    <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-all w-8 h-8" />
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </FadeIn>
 
         {/* Virtual tour CTA */}
         <FadeIn delay={0.2}>
