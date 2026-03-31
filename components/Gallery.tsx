@@ -96,53 +96,10 @@ export default function Gallery() {
             </button>
           </FadeIn>
 
-          {/* VALLEY LEFT 1 — col 1, row 3 */}
-          <FadeIn delay={0.2} className="md:col-start-1 md:col-span-1 md:row-start-3">
-            <button onClick={() => setLightbox("https://www.thekingsmeadows.com/wp-content/uploads/2024/03/ASHK1710-scaled.jpg")}
-              className="gallery-item relative w-full h-full min-h-[160px] block group" aria-label="View reception">
-              <Image src="https://www.thekingsmeadows.com/wp-content/uploads/2024/03/ASHK1710-scaled.jpg"
-                alt="Reception at The King's Meadows" fill className="object-cover" sizes="(max-width: 768px) 50vw, 17vw" unoptimized />
-              <div className="absolute inset-0 bg-forest-dark/0 group-hover:bg-forest-dark/30 transition-all duration-300 flex items-center justify-center">
-                <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-all w-8 h-8" />
-              </div>
-            </button>
-          </FadeIn>
-
-          {/* VALLEY LEFT 2 — col 2, row 3 */}
-          <FadeIn delay={0.25} className="md:col-start-2 md:col-span-1 md:row-start-3">
-            <button onClick={() => setLightbox("https://www.thekingsmeadows.com/wp-content/uploads/2024/03/Chandlier.jpg")}
-              className="gallery-item relative w-full h-full min-h-[160px] block group" aria-label="View chandelier">
-              <Image src="https://www.thekingsmeadows.com/wp-content/uploads/2024/03/Chandlier.jpg"
-                alt="Grand chandelier in the banquet hall" fill className="object-cover" sizes="(max-width: 768px) 50vw, 17vw" unoptimized />
-              <div className="absolute inset-0 bg-forest-dark/0 group-hover:bg-forest-dark/30 transition-all duration-300 flex items-center justify-center">
-                <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-all w-8 h-8" />
-              </div>
-            </button>
-          </FadeIn>
-
-          {/* VALLEY RIGHT 1 — col 5, row 3 */}
-          <FadeIn delay={0.3} className="md:col-start-5 md:col-span-1 md:row-start-3">
-            <button onClick={() => setLightbox("https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5868-new-3-2-1.jpg")}
-              className="gallery-item relative w-full h-full min-h-[160px] block group" aria-label="View event">
-              <Image src="https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5868-new-3-2-1.jpg"
-                alt="Event at The King's Meadows" fill className="object-cover" sizes="(max-width: 768px) 50vw, 17vw" unoptimized />
-              <div className="absolute inset-0 bg-forest-dark/0 group-hover:bg-forest-dark/30 transition-all duration-300 flex items-center justify-center">
-                <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-all w-8 h-8" />
-              </div>
-            </button>
-          </FadeIn>
-
-          {/* VALLEY RIGHT 2 — col 6, row 3 */}
-          <FadeIn delay={0.35} className="md:col-start-6 md:col-span-1 md:row-start-3">
-            <button onClick={() => setLightbox("https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_2715-scaled.jpg")}
-              className="gallery-item relative w-full h-full min-h-[160px] block group" aria-label="View banquet hall">
-              <Image src="https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_2715-scaled.jpg"
-                alt="Banquet hall setup" fill className="object-cover" sizes="(max-width: 768px) 50vw, 17vw" unoptimized />
-              <div className="absolute inset-0 bg-forest-dark/0 group-hover:bg-forest-dark/30 transition-all duration-300 flex items-center justify-center">
-                <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-all w-8 h-8" />
-              </div>
-            </button>
-          </FadeIn>
+          {/* Crown valleys — cols 1-2 and cols 5-6 at row 3 are intentionally empty
+               so the background shows through, creating the dip between the crown peaks */}
+          <div className="hidden md:block md:col-start-1 md:col-span-2 md:row-start-3" />
+          <div className="hidden md:block md:col-start-5 md:col-span-2 md:row-start-3" />
 
           {/* CROWN BASE — full width, row 4 */}
           <FadeIn delay={0.4} className="col-span-2 md:col-start-1 md:col-span-6 md:row-start-4">
