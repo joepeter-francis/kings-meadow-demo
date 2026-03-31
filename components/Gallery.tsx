@@ -17,18 +17,13 @@ const IMAGES = [
   { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg", alt: "Venue at The King's Meadows" },
 ];
 
-// Crown clip-path — one crown spanning the full grid width.
-// The shoulder/valley level sits at 38% from the top so the entire
-// area below 38% is a solid connected rectangle (the crown body).
-// Only the peaks pierce above 38%; valleys cut back down to 38%,
-// never below — this keeps it ONE shape, not multiple.
-//
-//   center peak:       50%  → 0%
-//   inner peaks:   40%/60%  → 3%
-//   outer peaks:   18%/82%  → 20%
-//   shoulder/valley level:    38%
+// Crown clip-path — 3 peaks matching the King's Meadows logo:
+//   outer left/right:  wide sweeping wings, tips at ~18% from top
+//   center spike:      tall narrow point reaching the very top (0%)
+//   valleys:           deep, at 55% — the rectangular body sits below
+//   outer edges:       diagonal (not vertical) like the logo wings
 const CROWN_CLIP =
-  "polygon(0% 100%, 0% 38%, 18% 20%, 30% 38%, 40% 3%, 48% 38%, 50% 0%, 52% 38%, 60% 3%, 70% 38%, 82% 20%, 100% 38%, 100% 100%)";
+  "polygon(0% 100%, 0% 55%, 24% 18%, 40% 55%, 50% 0%, 60% 55%, 76% 18%, 100% 55%, 100% 100%)";
 
 function FadeIn({
   children,
@@ -78,7 +73,7 @@ export default function Gallery() {
         {/* Crown-shaped gallery: 3×3 photo grid clipped into a crown silhouette */}
         <FadeIn delay={0.1}>
           <div
-            className="relative h-[340px] md:h-[560px] overflow-hidden"
+            className="relative h-[360px] md:h-[620px] overflow-hidden"
             style={{ clipPath: CROWN_CLIP }}
           >
             <div className="grid grid-cols-3 h-full gap-0.5">
