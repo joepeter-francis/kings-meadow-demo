@@ -17,13 +17,11 @@ const IMAGES = [
   { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg", alt: "Venue at The King's Meadows" },
 ];
 
-// Crown clip-path — 3 peaks matching the King's Meadows logo:
-//   outer left/right:  wide sweeping wings, tips at ~18% from top
-//   center spike:      tall narrow point reaching the very top (0%)
-//   valleys:           deep, at 55% — the rectangular body sits below
-//   outer edges:       diagonal (not vertical) like the logo wings
+// Crown clip-path — |\/\/| pattern:
+//   left wall  → valley → center peak → valley → right wall
+//   all three peaks reach y=0% (full height); valleys at y=52%
 const CROWN_CLIP =
-  "polygon(0% 100%, 0% 55%, 24% 18%, 40% 55%, 50% 0%, 60% 55%, 76% 18%, 100% 55%, 100% 100%)";
+  "polygon(0% 100%, 0% 0%, 33% 52%, 50% 0%, 67% 52%, 100% 0%, 100% 100%)";
 
 function FadeIn({
   children,
