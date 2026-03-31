@@ -5,46 +5,61 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { X, ZoomIn } from "lucide-react";
 
+// Crown shape (6-col desktop grid):
+//
+//  Row 1: [LEFT PEAK ──] [CENTER PEAK ──] [RIGHT PEAK ──]
+//  Row 2: [LEFT PEAK ──] [CENTER PEAK ──] [RIGHT PEAK ──]
+//  Row 3: [vL1][vL2]     [CENTER PEAK ──]  [vR1][vR2]
+//  Row 4: [BASE  (full width, 6 cols)                  ]
+//
+// Center peak is 3 rows → tallest prong; left & right are 2 rows; valleys in row 3.
+
 const images = [
+  // ── LEFT PEAK: cols 1-2, rows 1-2
   {
     src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/ASHK1682.jpg",
     alt: "Wedding celebration at The King's Meadows",
-    span: "col-span-2 row-span-2",
+    className: "md:col-start-1 md:col-span-2 md:row-start-1 md:row-span-2",
   },
+  // ── CENTER PEAK (tallest): cols 3-4, rows 1-3
+  {
+    src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/02/DJI_0175.jpg",
+    alt: "Aerial view of The King's Meadows",
+    className: "md:col-start-3 md:col-span-2 md:row-start-1 md:row-span-3",
+  },
+  // ── RIGHT PEAK: cols 5-6, rows 1-2
+  {
+    src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg",
+    alt: "Elegant venue interior",
+    className: "md:col-start-5 md:col-span-2 md:row-start-1 md:row-span-2",
+  },
+  // ── VALLEY LEFT (2 small cells flanking center on left, row 3)
   {
     src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/ASHK1710-scaled.jpg",
     alt: "Reception at The King's Meadows",
-    span: "",
+    className: "md:col-start-1 md:col-span-1 md:row-start-3",
   },
   {
     src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/Chandlier.jpg",
     alt: "Grand chandelier in the banquet hall",
-    span: "",
+    className: "md:col-start-2 md:col-span-1 md:row-start-3",
   },
-  {
-    src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/02/DJI_0175.jpg",
-    alt: "Aerial view of The King's Meadows",
-    span: "col-span-2",
-  },
-  {
-    src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg",
-    alt: "Elegant venue interior",
-    span: "",
-  },
+  // ── VALLEY RIGHT (2 small cells flanking center on right, row 3)
   {
     src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5868-new-3-2-1.jpg",
     alt: "Event at The King's Meadows",
-    span: "",
+    className: "md:col-start-5 md:col-span-1 md:row-start-3",
   },
   {
     src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_2715-scaled.jpg",
     alt: "Banquet hall setup",
-    span: "",
+    className: "md:col-start-6 md:col-span-1 md:row-start-3",
   },
+  // ── CROWN BASE: full width, row 4
   {
     src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_6061-new-3-2-scaled.jpg",
     alt: "Outdoor event at The Meadow",
-    span: "col-span-2",
+    className: "col-span-2 md:col-start-1 md:col-span-6 md:row-start-4",
   },
 ];
 
@@ -93,13 +108,13 @@ export default function Gallery() {
           </div>
         </FadeIn>
 
-        {/* Mosaic grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        {/* Crown grid */}
+        <div className="grid grid-cols-2 md:grid-cols-6 md:auto-rows-[200px] gap-2">
           {images.map((img, i) => (
-            <FadeIn key={img.src} delay={0.05 * i} className={img.span}>
+            <FadeIn key={img.src} delay={0.05 * i} className={img.className}>
               <button
                 onClick={() => setLightbox(img.src)}
-                className="gallery-item relative w-full h-full min-h-[200px] block group"
+                className="gallery-item relative w-full h-full min-h-[160px] block group"
                 aria-label={`View ${img.alt}`}
               >
                 <Image
