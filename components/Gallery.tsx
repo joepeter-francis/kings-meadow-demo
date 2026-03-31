@@ -6,36 +6,34 @@ import Image from "next/image";
 import { X, ZoomIn } from "lucide-react";
 
 const IMAGES = [
-  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/ASHK1682.jpg", alt: "Wedding celebration at The King's Meadows" },
-  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/02/DJI_0175.jpg", alt: "Aerial view of The King's Meadows" },
-  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg", alt: "Elegant venue interior" },
-  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/ASHK1710-scaled.jpg", alt: "Reception at The King's Meadows" },
-  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/Chandlier.jpg", alt: "Grand chandelier in the banquet hall" },
-  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5868-new-3-2-1.jpg", alt: "Event at The King's Meadows" },
-  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_2715-scaled.jpg", alt: "Banquet hall setup" },
-  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_6061-new-3-2-scaled.jpg", alt: "Outdoor event at The Meadow" },
-  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg", alt: "Venue at The King's Meadows" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/ASHK1682.jpg",          alt: "Wedding celebration" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/02/DJI_0175.jpg",          alt: "Aerial view" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg", alt: "Elegant interior" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/ASHK1710-scaled.jpg",   alt: "Reception" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/Chandlier.jpg",         alt: "Grand chandelier" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5868-new-3-2-1.jpg", alt: "Event" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_2715-scaled.jpg",   alt: "Banquet hall" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_6061-new-3-2-scaled.jpg", alt: "Outdoor event" },
+  { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg", alt: "Venue" },
 ];
 
-// Three overlapping triangles matching the crown sketch:
-//   1 LEFT:   wide, peak on the left at mid-height
-//   2 CENTER: tallest, peak at top-center
-//   3 RIGHT:  mirror of left, peak on the right at mid-height
-// Their union forms the crown silhouette.
-const PEAKS = [
-  { left: "13%", top: "50%" },  // left peak
-  { left: "50%", top: "5%"  },  // center peak
-  { left: "87%", top: "50%" },  // right peak
-];
+// Coordinates taken directly from the SVG sketch (viewBox 600 × 470):
+//   left peak   (0,   210) → CSS  0.0%  44.7%
+//   center peak (300,   0) → CSS 50.0%   0.0%
+//   right peak  (600, 210) → CSS100.0%  44.7%
+//   bottom-left  (70, 470) → CSS 11.7% 100.0%
+//   bottom-right(520, 470) → CSS 86.7% 100.0%
+//
+// The crown pentagon is the union of the three overlapping triangles.
+// Internal dividing lines (T1 right diagonal and T3 left diagonal) are
+// drawn as a semi-transparent SVG overlay so the 3-triangle structure
+// stays visible, matching the sketch.
 
-function FadeIn({
-  children,
-  delay = 0,
-  className = "",
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
+const GOLD    = "radial-gradient(circle at 35% 35%, #F0D080, #A07828)";
+const SHADOW  = "0 0 0 2px #fff, 0 0 8px rgba(180,140,40,0.5)";
+
+function FadeIn({ children, delay = 0, className = "" }: {
+  children: React.ReactNode; delay?: number; className?: string;
 }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
@@ -58,6 +56,7 @@ export default function Gallery() {
   return (
     <section id="gallery" className="bg-white section-py">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
+
         {/* Header */}
         <FadeIn>
           <div className="text-center mb-16">
@@ -75,27 +74,16 @@ export default function Gallery() {
 
         {/* Crown gallery */}
         <FadeIn delay={0.1}>
-          {/* SVG clip definition — three separate triangles */}
-          <svg width="0" height="0" className="absolute overflow-hidden">
-            <defs>
-              <clipPath id="crown-clip" clipPathUnits="objectBoundingBox">
-                {/* 1 — Left: wide triangle, peak at left mid-height */}
-                <polygon points="0.13,0.50 0.01,0.97 0.58,0.97" />
-                {/* 2 — Center: tall spike, peak at top-center */}
-                <polygon points="0.50,0.05 0.14,0.97 0.86,0.97" />
-                {/* 3 — Right: mirror of left, peak at right mid-height */}
-                <polygon points="0.87,0.50 0.42,0.97 0.99,0.97" />
-              </clipPath>
-            </defs>
-          </svg>
+          {/* mt-3 gives breathing room so the center-peak circle doesn't clip */}
+          <div className="relative h-[340px] md:h-[560px] mt-3">
 
-          {/* Outer container — gold circles live here (not clipped) */}
-          <div className="relative h-[360px] md:h-[620px]">
-
-            {/* Photo grid clipped to the three crown triangles */}
+            {/* ── Photo grid clipped to the crown pentagon ── */}
             <div
               className="absolute inset-0"
-              style={{ clipPath: "url(#crown-clip)" }}
+              style={{
+                clipPath:
+                  "polygon(11.7% 100%, 0% 44.7%, 50% 0%, 100% 44.7%, 86.7% 100%)",
+              }}
             >
               <div className="grid grid-cols-3 h-full">
                 {IMAGES.map((img, i) => (
@@ -106,9 +94,7 @@ export default function Gallery() {
                     aria-label={`View ${img.alt}`}
                   >
                     <Image
-                      src={img.src}
-                      alt={img.alt}
-                      fill
+                      src={img.src} alt={img.alt} fill
                       className="object-cover"
                       sizes="(max-width: 768px) 33vw, 25vw"
                       unoptimized
@@ -121,20 +107,35 @@ export default function Gallery() {
               </div>
             </div>
 
-            {/* Gold circles at each peak tip */}
-            {PEAKS.map((pos, i) => (
-              <div
-                key={i}
-                className="absolute z-10 w-4 h-4 md:w-5 md:h-5 rounded-full"
-                style={{
-                  left: pos.left,
-                  top: pos.top,
-                  transform: "translate(-50%, -50%)",
-                  background: "radial-gradient(circle at 35% 35%, #F0D080, #A07828)",
-                  boxShadow: "0 0 0 2px #fff, 0 0 8px rgba(180,140,40,0.5)",
-                }}
+            {/* ── SVG overlay: crown outline + internal triangle edges ── */}
+            <svg
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              viewBox="0 0 600 470"
+              preserveAspectRatio="none"
+            >
+              {/* Internal dividing lines — T1 right edge and T3 left edge */}
+              <line x1="0"   y1="210" x2="520" y2="470" stroke="white" strokeWidth="1.5" strokeOpacity="0.35" />
+              <line x1="600" y1="210" x2="70"  y2="470" stroke="white" strokeWidth="1.5" strokeOpacity="0.35" />
+              {/* Crown outline */}
+              <polygon
+                points="0,210 300,0 600,210 520,470 70,470"
+                fill="none"
+                stroke="rgba(201,164,80,0.75)"
+                strokeWidth="2.5"
               />
-            ))}
+            </svg>
+
+            {/* ── Gold circles at the three peak tips ── */}
+            {/* Left peak — (0%, 44.7%), circle anchored to left edge */}
+            <div className="absolute z-10 w-4 h-4 md:w-5 md:h-5 rounded-full"
+              style={{ left: 0, top: "44.7%", transform: "translateY(-50%)", background: GOLD, boxShadow: SHADOW }} />
+            {/* Center peak — (50%, 0%), circle anchored to top edge */}
+            <div className="absolute z-10 w-4 h-4 md:w-5 md:h-5 rounded-full"
+              style={{ left: "50%", top: 0, transform: "translateX(-50%)", background: GOLD, boxShadow: SHADOW }} />
+            {/* Right peak — (100%, 44.7%), circle anchored to right edge */}
+            <div className="absolute z-10 w-4 h-4 md:w-5 md:h-5 rounded-full"
+              style={{ right: 0, top: "44.7%", transform: "translateY(-50%)", background: GOLD, boxShadow: SHADOW }} />
+
           </div>
         </FadeIn>
 
@@ -143,8 +144,7 @@ export default function Gallery() {
           <div className="mt-12 text-center">
             <a
               href="https://my.matterport.com/show/?m=WLbpvLSsFof"
-              target="_blank"
-              rel="noopener noreferrer"
+              target="_blank" rel="noopener noreferrer"
               className="btn-outline btn-outline-dark inline-flex"
             >
               Take a Virtual Tour
@@ -157,33 +157,22 @@ export default function Gallery() {
       <AnimatePresence>
         {lightbox && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-forest-dark/95 flex items-center justify-center p-4"
             onClick={() => setLightbox(null)}
           >
             <button
               className="absolute top-6 right-6 text-white/60 hover:text-white"
-              onClick={() => setLightbox(null)}
-              aria-label="Close lightbox"
+              onClick={() => setLightbox(null)} aria-label="Close lightbox"
             >
               <X className="w-8 h-8" />
             </button>
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
               className="relative max-w-5xl max-h-[85vh] w-full h-full"
               onClick={(e) => e.stopPropagation()}
             >
-              <Image
-                src={lightbox}
-                alt="Gallery image"
-                fill
-                className="object-contain"
-                unoptimized
-              />
+              <Image src={lightbox} alt="Gallery image" fill className="object-contain" unoptimized />
             </motion.div>
           </motion.div>
         )}
