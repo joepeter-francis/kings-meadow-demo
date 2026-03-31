@@ -17,11 +17,19 @@ const IMAGES = [
   { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg", alt: "Venue at The King's Meadows" },
 ];
 
-// Crown clip-path — |\/\/| pattern:
-//   left wall  → valley → center peak → valley → right wall
-//   all three peaks reach y=0% (full height); valleys at y=52%
-const CROWN_CLIP =
-  "polygon(0% 100%, 0% 0%, 33% 52%, 50% 0%, 67% 52%, 100% 0%, 100% 100%)";
+// Three separate triangle peaks — each is an independent polygon inside
+// the SVG clipPath so the background shows through the gaps between them.
+//
+//   LEFT   tip @ (18%, 5%)   base: x 0–36%
+//   CENTER tip @ (50%, 2%)   base: x 38–62%
+//   RIGHT  tip @ (82%, 5%)   base: x 64–100%
+//
+// 2% gaps between the triangles at the bottom let white show through.
+const PEAKS = [
+  { left: "18%", top: "5%" },
+  { left: "50%", top: "2%" },
+  { left: "82%", top: "5%" },
+];
 
 function FadeIn({
   children,
@@ -68,34 +76,68 @@ export default function Gallery() {
           </div>
         </FadeIn>
 
-        {/* Crown-shaped gallery: 3×3 photo grid clipped into a crown silhouette */}
+        {/* Crown gallery */}
         <FadeIn delay={0.1}>
-          <div
-            className="relative h-[360px] md:h-[620px] overflow-hidden"
-            style={{ clipPath: CROWN_CLIP }}
-          >
-            <div className="grid grid-cols-3 h-full gap-0.5">
-              {IMAGES.map((img, i) => (
-                <button
-                  key={i}
-                  onClick={() => setLightbox(img.src)}
-                  className="relative w-full h-full group"
-                  aria-label={`View ${img.alt}`}
-                >
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 33vw, 25vw"
-                    unoptimized
-                  />
-                  <div className="absolute inset-0 bg-forest-dark/0 group-hover:bg-forest-dark/30 transition-all duration-300 flex items-center justify-center">
-                    <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-all w-8 h-8" />
-                  </div>
-                </button>
-              ))}
+          {/* SVG clip definition — three separate triangles */}
+          <svg width="0" height="0" className="absolute overflow-hidden">
+            <defs>
+              <clipPath id="crown-clip" clipPathUnits="objectBoundingBox">
+                {/* Left triangle */}
+                <polygon points="0.18,0.05 0,1 0.36,1" />
+                {/* Center triangle — tallest */}
+                <polygon points="0.50,0.02 0.38,1 0.62,1" />
+                {/* Right triangle */}
+                <polygon points="0.82,0.05 0.64,1 1,1" />
+              </clipPath>
+            </defs>
+          </svg>
+
+          {/* Outer container — gold circles live here (not clipped) */}
+          <div className="relative h-[360px] md:h-[620px]">
+
+            {/* Photo grid clipped to the three crown triangles */}
+            <div
+              className="absolute inset-0"
+              style={{ clipPath: "url(#crown-clip)" }}
+            >
+              <div className="grid grid-cols-3 h-full">
+                {IMAGES.map((img, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setLightbox(img.src)}
+                    className="relative w-full h-full group"
+                    aria-label={`View ${img.alt}`}
+                  >
+                    <Image
+                      src={img.src}
+                      alt={img.alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 33vw, 25vw"
+                      unoptimized
+                    />
+                    <div className="absolute inset-0 bg-forest-dark/0 group-hover:bg-forest-dark/30 transition-all duration-300 flex items-center justify-center">
+                      <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-all w-8 h-8" />
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
+
+            {/* Gold circles at each peak tip */}
+            {PEAKS.map((pos, i) => (
+              <div
+                key={i}
+                className="absolute z-10 w-4 h-4 md:w-5 md:h-5 rounded-full"
+                style={{
+                  left: pos.left,
+                  top: pos.top,
+                  transform: "translate(-50%, -50%)",
+                  background: "radial-gradient(circle at 35% 35%, #F0D080, #A07828)",
+                  boxShadow: "0 0 0 2px #fff, 0 0 8px rgba(180,140,40,0.5)",
+                }}
+              />
+            ))}
           </div>
         </FadeIn>
 
