@@ -17,18 +17,15 @@ const IMAGES = [
   { src: "https://www.thekingsmeadows.com/wp-content/uploads/2024/03/DSC_5804-new-copy-scaled.jpg", alt: "Venue at The King's Meadows" },
 ];
 
-// Three separate triangle peaks — each is an independent polygon inside
-// the SVG clipPath so the background shows through the gaps between them.
-//
-//   LEFT   tip @ (18%, 5%)   base: x 0–36%
-//   CENTER tip @ (50%, 2%)   base: x 38–62%
-//   RIGHT  tip @ (82%, 5%)   base: x 64–100%
-//
-// 2% gaps between the triangles at the bottom let white show through.
+// Three overlapping triangles matching the crown sketch:
+//   1 LEFT:   wide, peak on the left at mid-height
+//   2 CENTER: tallest, peak at top-center
+//   3 RIGHT:  mirror of left, peak on the right at mid-height
+// Their union forms the crown silhouette.
 const PEAKS = [
-  { left: "18%", top: "5%" },
-  { left: "50%", top: "2%" },
-  { left: "82%", top: "5%" },
+  { left: "13%", top: "50%" },  // left peak
+  { left: "50%", top: "5%"  },  // center peak
+  { left: "87%", top: "50%" },  // right peak
 ];
 
 function FadeIn({
@@ -82,12 +79,12 @@ export default function Gallery() {
           <svg width="0" height="0" className="absolute overflow-hidden">
             <defs>
               <clipPath id="crown-clip" clipPathUnits="objectBoundingBox">
-                {/* Left triangle */}
-                <polygon points="0.18,0.05 0,1 0.36,1" />
-                {/* Center triangle — tallest */}
-                <polygon points="0.50,0.02 0.38,1 0.62,1" />
-                {/* Right triangle */}
-                <polygon points="0.82,0.05 0.64,1 1,1" />
+                {/* 1 — Left: wide triangle, peak at left mid-height */}
+                <polygon points="0.13,0.50 0.01,0.97 0.58,0.97" />
+                {/* 2 — Center: tall spike, peak at top-center */}
+                <polygon points="0.50,0.05 0.14,0.97 0.86,0.97" />
+                {/* 3 — Right: mirror of left, peak at right mid-height */}
+                <polygon points="0.87,0.50 0.42,0.97 0.99,0.97" />
               </clipPath>
             </defs>
           </svg>
